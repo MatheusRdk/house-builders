@@ -23,8 +23,8 @@ public class HouseService {
     private final HouseRepository houseRepository;
     private final EngineerRepository engineerRepository;
     private final ArchitectRepository architectRepository;
-//    private final EngineerService engineerService;
-//    private final ArchitectService architectService;
+//    private final EngineerService engineerService;  testing
+//    private final ArchitectService architectService; testing
 
     public List<House> listAll(){
         return houseRepository.findAll();
