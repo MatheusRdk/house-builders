@@ -23,8 +23,8 @@ public class HouseService {
     private final HouseRepository houseRepository;
     private final EngineerRepository engineerRepository;
     private final ArchitectRepository architectRepository;
-//    private final EngineerService engineerService;  testing
-//    private final ArchitectService architectService; testing
+    private final EngineerService engineerService;
+    private final ArchitectService architectService;
 
     public List<House> listAll(){
         return houseRepository.findAll();
@@ -80,12 +80,30 @@ public class HouseService {
 
     public void replace(HousePutRequestBody housePutRequestBody){
         House savedHouse = findByIdOrThrowBadRequestException(housePutRequestBody.getId());
-        House house = HouseMapper.INSTANCE.toHouse(housePutRequestBody);
-//        House.builder()
-//                .projectName(housePutRequestBody.getProjectName())
-//                .engineer(engineerService.findByIdOrThrowBadRequestException(housePutRequestBody.getEngineerId()))
-//                .architect(architectService.findByIdOrThrowBadRequestException(housePutRequestBody.getArchitectId()))
-//                .build();
+//        House house = HouseMapper.INSTANCE.toHouse(housePutRequestBody);
+        House house =House.builder()
+                .projectName(housePutRequestBody.getProjectName())
+                .build();
+
+        Long engineerId = housePutRequestBody.getEngineerId();
+        if(engineerId != null){
+            Optional<Engineer> engineerOptional = engineerRepository.findById(engineerId);
+            engineerOptional.ifPresent(engineer -> {
+                house.setEngineer(engineer);
+                engineer.getHouses().add(house);
+                engineerRepository.save(engineer);
+            });
+        }
+
+        Long architectId = housePutRequestBody.getArchitectId();
+        if(architectId != null){
+            Optional<Architect> architectOptional = architectRepository.findById(architectId);
+            architectOptional.ifPresent(architect -> {
+                house.setArchitect(architect);
+                architect.getHouses().add(house);
+                architectRepository.save(architect);
+            });
+        }
 
         house.setId(savedHouse.getId());
         houseRepository.save(house);

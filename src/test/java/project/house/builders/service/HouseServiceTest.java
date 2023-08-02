@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.util.Assert;
 import project.house.builders.domain.Architect;
 import project.house.builders.domain.Engineer;
 import project.house.builders.domain.House;
@@ -15,8 +14,7 @@ import project.house.builders.repository.ArchitectRepository;
 import project.house.builders.repository.EngineerRepository;
 import project.house.builders.repository.HouseRepository;
 import project.house.builders.request.HousePostRequestBodyCreator;
-import project.house.builders.requests.HousePostRequestBody;
-import project.house.builders.util.HouseCreator;
+import project.house.builders.requests.HousePutRequestBody;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -34,6 +32,12 @@ public class HouseServiceTest {
 
     @Mock
     private ArchitectRepository architectRepository;
+
+    @Mock
+    private EngineerService engineerService;
+
+    @Mock
+    private ArchitectService architectService;
 
     @BeforeEach
     void setUp(){
@@ -84,5 +88,32 @@ public class HouseServiceTest {
 
         Assertions.assertTrue(existingArchitect.getHouses().contains(savedHouse));
         Assertions.assertEquals(savedHouse.getArchitect(), existingArchitect);
+    }
+
+    @Test
+    public void putHouse_withoutEngineerOrArchitect_shouldReturnEqualNameAndId_WhenSuccessful(){
+        Long houseId = 1L;
+        HousePutRequestBody requestBody = HousePutRequestBody.builder()
+                .id(houseId)
+                .projectName("UpdatedProject")
+                .build();
+
+
+        House existingHouse = House.builder()
+                .id(houseId)
+                .projectName("OriginalProject")
+                .build();
+
+        Mockito.when(houseRepository.findById(houseId)).thenReturn(Optional.of(existingHouse));
+        Mockito.when(houseRepository.save(Mockito.any(House.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        houseService.replace(requestBody);
+
+        // Then
+        ArgumentCaptor<House> houseCaptor = ArgumentCaptor.forClass(House.class);
+        Mockito.verify(houseRepository).save(houseCaptor.capture());
+        House updatedHouse = houseCaptor.getValue();
+        Assertions.assertEquals(requestBody.getId(), updatedHouse.getId());
+        Assertions.assertEquals(requestBody.getProjectName(), updatedHouse.getProjectName());
     }
 }
