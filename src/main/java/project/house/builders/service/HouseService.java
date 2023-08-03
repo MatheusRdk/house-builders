@@ -80,8 +80,7 @@ public class HouseService {
 
     public void replace(HousePutRequestBody housePutRequestBody){
         House savedHouse = findByIdOrThrowBadRequestException(housePutRequestBody.getId());
-//        House house = HouseMapper.INSTANCE.toHouse(housePutRequestBody);
-        House house =House.builder()
+        House house = House.builder()
                 .projectName(housePutRequestBody.getProjectName())
                 .build();
 
@@ -91,7 +90,6 @@ public class HouseService {
             engineerOptional.ifPresent(engineer -> {
                 house.setEngineer(engineer);
                 engineer.getHouses().add(house);
-                engineerRepository.save(engineer);
             });
         }
 
@@ -101,7 +99,6 @@ public class HouseService {
             architectOptional.ifPresent(architect -> {
                 house.setArchitect(architect);
                 architect.getHouses().add(house);
-                architectRepository.save(architect);
             });
         }
 

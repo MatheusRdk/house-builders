@@ -41,7 +41,7 @@ public class HouseController {
         return new ResponseEntity<>(houseService.save(housePostRequestBody), HttpStatus.CREATED);
     }
 
-    @DeleteMapping
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable long id){
         houseService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
