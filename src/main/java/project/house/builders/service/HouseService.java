@@ -6,7 +6,6 @@ import project.house.builders.domain.Architect;
 import project.house.builders.domain.Engineer;
 import project.house.builders.domain.House;
 import project.house.builders.exception.BadRequestException;
-import project.house.builders.mapper.HouseMapper;
 import project.house.builders.repository.ArchitectRepository;
 import project.house.builders.repository.EngineerRepository;
 import project.house.builders.repository.HouseRepository;
@@ -23,8 +22,6 @@ public class HouseService {
     private final HouseRepository houseRepository;
     private final EngineerRepository engineerRepository;
     private final ArchitectRepository architectRepository;
-    private final EngineerService engineerService;
-    private final ArchitectService architectService;
 
     public List<House> listAll(){
         return houseRepository.findAll();
