@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.5.RELEASE</version>
+		<version>3.1.2</version>
 		<relativePath/>
 	</parent>
 	<groupId>project.house</groupId>
@@ -14,7 +14,7 @@
 	<name>builders</name>
 	<description>House builders project</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
 
 	</properties>
@@ -55,7 +55,9 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.33</version>
 		</dependency>
+
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
