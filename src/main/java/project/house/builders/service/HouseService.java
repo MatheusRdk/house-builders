@@ -1,5 +1,6 @@
 package project.house.builders.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.house.builders.domain.Architect;
@@ -36,6 +37,7 @@ public class HouseService {
                 .orElseThrow(() -> new BadRequestException("House project not found."));
     }
 
+    @Transactional
     public House save(HousePostRequestBody housePostRequestBody){
         House house = House.builder()
                 .projectName(housePostRequestBody.getProjectName())
@@ -45,21 +47,21 @@ public class HouseService {
         Long engineerId = housePostRequestBody.getEngineerId();
         if(engineerId != null){
             Optional<Engineer> engineerOptional = engineerRepository.findById(engineerId);
-            engineerOptional.ifPresent(engineer -> {
+            engineerOptional.ifPresentOrElse((engineer) -> {
                 house.setEngineer(engineer);
                 engineer.getHouses().add(house);
                 engineerRepository.save(engineer);
-            });
+            }, () -> {throw new BadRequestException("Engineer not found");});
         }
 
         Long architectId = housePostRequestBody.getArchitectId();
         if(architectId != null){
             Optional<Architect> architectOptional = architectRepository.findById(architectId);
-            architectOptional.ifPresent(architect -> {
+            architectOptional.ifPresentOrElse((architect) -> {
                 house.setArchitect(architect);
                 architect.getHouses().add(house);
                 architectRepository.save(architect);
-            });
+            }, () -> {throw new BadRequestException("Architect not found");});
         }
         return house;
     }
@@ -84,19 +86,19 @@ public class HouseService {
         Long engineerId = housePutRequestBody.getEngineerId();
         if(engineerId != null){
             Optional<Engineer> engineerOptional = engineerRepository.findById(engineerId);
-            engineerOptional.ifPresent(engineer -> {
+            engineerOptional.ifPresentOrElse((engineer) -> {
                 house.setEngineer(engineer);
                 engineer.getHouses().add(house);
-            });
+            }, () -> {throw new BadRequestException("Engineer not found");});
         }
 
         Long architectId = housePutRequestBody.getArchitectId();
         if(architectId != null){
             Optional<Architect> architectOptional = architectRepository.findById(architectId);
-            architectOptional.ifPresent(architect -> {
+            architectOptional.ifPresentOrElse((architect) -> {
                 house.setArchitect(architect);
                 architect.getHouses().add(house);
-            });
+            }, () -> {throw new BadRequestException("Architect not found");});
         }
 
         house.setId(savedHouse.getId());

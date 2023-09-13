@@ -3,20 +3,18 @@ package project.house.builders.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import project.house.builders.domain.Architect;
-import project.house.builders.domain.Engineer;
 import project.house.builders.exception.BadRequestException;
 import project.house.builders.mapper.ArchitectMapper;
-import project.house.builders.mapper.EngineerMapper;
 import project.house.builders.repository.ArchitectRepository;
 import project.house.builders.requests.ArchitectPostRequestBody;
 import project.house.builders.requests.ArchitectPutRequestBody;
-import project.house.builders.requests.EngineerPutRequestBody;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ArchitectService {
+
     private final ArchitectRepository architectRepository;
 
     public List<Architect> listAll(){

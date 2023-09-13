@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import project.house.builders.domain.Architect;
 import project.house.builders.requests.ArchitectPostRequestBody;
@@ -36,17 +37,20 @@ public class ArchitectController {
         return ResponseEntity.ok(architectService.findByName(name));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Architect> save(@RequestBody ArchitectPostRequestBody architectPostRequestBody){
         return new ResponseEntity<>(architectService.save(architectPostRequestBody), HttpStatus.CREATED);
     }
 
-    @DeleteMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable long id){
         architectService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping
     public ResponseEntity<Void> replace(@RequestBody ArchitectPutRequestBody architectPutRequestBody){
         architectService.replace(architectPutRequestBody);
