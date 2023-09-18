@@ -90,12 +90,14 @@ For testing purposes, we have two users:
 - Use the endpoints mentioned above to manage houses, architects, and engineers.
 - Access endpoints that require administrator authorization using appropriate credentials.
 
+## Swagger
+- To better understand how to use the API, you can access the documentation at `http://server:port/swagger-ui.html`, depending on how you have configured your server and port settings.
+
 ## Contributions
 
 Contributions to this project are welcome. Feel free to create pull requests, report issues, or propose improvements.
 
 
-### In progress:
+### In progress
 
-- I'm working with Swagger, for technical documentation.
 - Working on database user authentication
