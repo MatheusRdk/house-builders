@@ -26,3 +26,8 @@ logging:
 info:
   app: Builders project by Matheus Rudek
   github: https://github.com/MatheusRdk/
+
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:my-secret-key}

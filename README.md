@@ -1,4 +1,4 @@
-# House, Architects, and Engineers Management API Project
+# House, Architects, and Engineers Management API
 
 This is a Java 17 and Spring Boot 3 API project that enables the management of houses, architects, and engineers. The API provides basic CRUD operations for each entity and use a MySQL database (running in Docker).
 
