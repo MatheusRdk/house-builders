@@ -17,10 +17,13 @@ As it stands, you need to configure the available port on your computer to run t
 
 ## Security
 
-API security is managed with Spring Security 6, using in-memory users. Endpoints that alter the database state (POST and PUT) can only be accessed by administrators.
-For testing purposes, we have two users:
-'admin' and 'user', each with the authorizations corresponding to their name, as well as the username and password being their own names.
+API security is effectively managed through the utilization of Spring Security 6 in conjunction with JWT tokens, and our system maintains a user database. Specifically, endpoints responsible for modifying the database state (i.e., HTTP POST and PUT requests) are restricted to administrator-level access only. Additionally, all incoming requests require authentication via user login.
 
+To create a new user, the process involves accessing the following URL: `http://server:port/auth/register`. You must provide a JSON payload containing the fields "login," "password," and "role" (which can be either "ADMIN" or "USER").
+
+To initiate a login session, you need to send a JSON payload containing "login" and "password" to the URL: `http://server:port/auth/login`. Following successful authentication, you will receive a JWT token, which is mandatory for accessing the restricted endpoints.
+
+For testing purposes, anyone is allowed to create a user with an "ADMIN" role. However, for production environments, it is advisable to create an administrator directly within the database. The endpoint should be primarily used for creating "USER" roles.
 ## Entities and Endpoints
 
 ### Houses
@@ -92,12 +95,8 @@ For testing purposes, we have two users:
 
 ## Swagger
 - To better understand how to use the API, you can access the documentation at `http://server:port/swagger-ui.html`, depending on how you have configured your server and port settings.
+- You can test anything in the API using Swagger, including user registration and login functionalities. To access the endpoints, simply insert the JWT token into the "padlock" field located on the right side of each endpoint in swagger, or in the "Authorize" field above the endpoints to authorize all.
 
 ## Contributions
 
 Contributions to this project are welcome. Feel free to create pull requests, report issues, or propose improvements.
-
-
-### In progress
-
-- Working on database user authentication

@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -27,20 +28,22 @@ public class HouseController {
 
 
     @GetMapping(path = "/all")
-    @Operation(summary = "List all house projects")
+    @Operation(summary = "List all house projects", security = { @SecurityRequirement(name = "bearer-key") } )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content),
-            @ApiResponse(responseCode = "401", description = "Unauthorized, without any authentication", content = @Content)
+            @ApiResponse(responseCode = "401", description = "Unauthorized, without any authentication", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content)
     })
     public ResponseEntity<List<House>> listAll(){
         return new ResponseEntity<>(houseService.listAll(), HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}")
-    @Operation(summary = "Find a house by id")
+    @Operation(summary = "Find a house by id", security = { @SecurityRequirement(name = "bearer-key") } )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content),
             @ApiResponse(responseCode = "401", description = "Unauthorized, without any authentication", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
             @ApiResponse(responseCode = "400", description = "House project not found", content = @Content),
     })
     public ResponseEntity<House> findById(@PathVariable long id){
@@ -48,9 +51,10 @@ public class HouseController {
     }
 
     @GetMapping(path = "/find")
-    @Operation(summary = "Find a house by name", description = "/houses/find?name=Houseproject+name+here")
+    @Operation(summary = "Find a house by name", description = "/houses/find?name=Houseproject+name+here", security = { @SecurityRequirement(name = "bearer-key") } )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
             @ApiResponse(responseCode = "401", description = "Unauthorized, without any authentication", content = @Content)
     })
     public ResponseEntity <List<House>> findByName(@RequestParam(required = false) String name){
@@ -59,7 +63,7 @@ public class HouseController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    @Operation(summary = "Create a new house")
+    @Operation(summary = "Create a new house", security = { @SecurityRequirement(name = "bearer-key") } )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "401", description = "Unauthorized, without any authentication", content = @Content),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
@@ -73,7 +77,7 @@ public class HouseController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = "/{id}")
-    @Operation(summary = "Delete a house by id")
+    @Operation(summary = "Delete a house by id", security = { @SecurityRequirement(name = "bearer-key") } )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "401", description = "Unauthorized, without any authentication"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
@@ -87,7 +91,8 @@ public class HouseController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping
-    @Operation(summary = "Updates a house", description = "You must pass the name and the id, if you leave architect and engineer blank they update to null")
+    @Operation(summary = "Updates a house", description = "You must pass the name and the id, if you leave architect and engineer blank they update to null"
+            , security = { @SecurityRequirement(name = "bearer-key") } )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "401", description = "Unauthorized, without any authentication"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),

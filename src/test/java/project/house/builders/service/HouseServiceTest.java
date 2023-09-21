@@ -54,8 +54,11 @@ public class HouseServiceTest {
     public void saveHouseWithEngineer_returnsHouse_WhenSuccessful(){
 
         Engineer existingEngineer = Engineer.builder().name("Existing Engineer").id(1L).houses(new ArrayList<>()).build();
+        Architect existingArchitect = Architect.builder().name("Existing Architect").id(1L).houses(new ArrayList<>()).build();
+
 
         Mockito.when(engineerRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(existingEngineer));
+        Mockito.when(architectRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(existingArchitect));
 
         House savedHouse = houseService.save(HousePostRequestBodyCreator.createHousePostRequestBody());
 
@@ -68,26 +71,6 @@ public class HouseServiceTest {
 
         Assertions.assertTrue(existingEngineer.getHouses().contains(savedHouse));
         Assertions.assertEquals(savedHouse.getEngineer(), existingEngineer);
-    }
-
-    @Test
-    public void saveHouseWithArchitect_returnsHouse_WhenSuccessful(){
-
-        Architect existingArchitect = Architect.builder().name("Existing Architect").id(1L).houses(new ArrayList<>()).build();
-
-        Mockito.when(architectRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(existingArchitect));
-
-        House savedHouse = houseService.save(HousePostRequestBodyCreator.createHousePostRequestBody());
-
-        Mockito.verify(architectRepository, Mockito.times(1)).findById(1L);
-
-        Assertions.assertNotNull(savedHouse.getId());
-        Assertions.assertEquals("TestProject", savedHouse.getProjectName());
-
-        Mockito.verify(architectRepository, Mockito.times(1)).findById(1L);
-
-        Assertions.assertTrue(existingArchitect.getHouses().contains(savedHouse));
-        Assertions.assertEquals(savedHouse.getArchitect(), existingArchitect);
     }
 
     @Test

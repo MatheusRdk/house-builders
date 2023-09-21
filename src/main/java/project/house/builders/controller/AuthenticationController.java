@@ -1,45 +1,46 @@
 package project.house.builders.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import project.house.builders.service.TokenService;
-import project.house.builders.user.*;
+import project.house.builders.service.AuthenticationService;
+import project.house.builders.user.AuthenticationRequestBody;
+import project.house.builders.user.LoginResponseBody;
+import project.house.builders.user.RegisterRequestBody;
 
 @RestController
 @RequestMapping("auth")
 public class AuthenticationController {
     @Autowired
-    private TokenService tokenService;
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private UserRepository repository;
+    private AuthenticationService authenticationService;
 
     @PostMapping("/login")
+    @Operation(summary = "You should copy the JWT token that will be displayed in the response body when logging successfuly.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden")
+    })
     public ResponseEntity login(@RequestBody @Valid AuthenticationRequestBody data){
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login, data.password);
-        var auth = this.authenticationManager.authenticate(usernamePassword);
-
-        var token = tokenService.generateToken((User) auth.getPrincipal());
-
+        String token = authenticationService.authenticateAndGenerateToken(data);
         return ResponseEntity.ok(new LoginResponseBody(token));
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Register a new user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Bad Request, password cannot be null or empty, or login already exists"),
+            @ApiResponse(responseCode = "403", description = "Check the role name, login and password cannot be null or empty.")
+    })
     public ResponseEntity register(@RequestBody @Valid RegisterRequestBody data){
-        if(this.repository.findByLogin(data.login) != null) return ResponseEntity.badRequest().build();
-
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password);
-        User newUser = new User(data.login, encryptedPassword, data.role);
-        repository.save(newUser);
-        return ResponseEntity.ok().build();
+        return authenticationService.registerNewUser(data);
     }
 }

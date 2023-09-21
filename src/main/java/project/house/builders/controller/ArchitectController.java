@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -27,9 +28,10 @@ public class ArchitectController {
 
 
     @GetMapping(path = "/all")
-    @Operation(summary = "List all achitects")
+    @Operation(summary = "List all achitects", security = { @SecurityRequirement(name = "bearer-key") } )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, without any authentication", content = @Content)
     })
     public ResponseEntity<List<Architect>> listAll(){
@@ -37,10 +39,11 @@ public class ArchitectController {
     }
 
     @GetMapping(path = "/{id}")
-    @Operation(summary = "Find an architect by id")
+    @Operation(summary = "Find an architect by id", security = { @SecurityRequirement(name = "bearer-key") } )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content),
             @ApiResponse(responseCode = "401", description = "Unauthorized, without any authentication", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "400", description = "Architect not found", content = @Content),
     })
     public ResponseEntity<Architect> findById(@PathVariable long id){
@@ -48,9 +51,10 @@ public class ArchitectController {
     }
 
     @GetMapping(path = "/find") // /architects/find?name=architectname
-    @Operation(summary = "Find an architect by name", description = "/houses/find?name=Architect+name+here")
+    @Operation(summary = "Find an architect by name", description = "/houses/find?name=Architect+name+here", security = { @SecurityRequirement(name = "bearer-key") } )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful operation", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
             @ApiResponse(responseCode = "401", description = "Unauthorized, without any authentication", content = @Content)
     })
     public ResponseEntity <List<Architect>> findByName(@RequestParam(required = false) String name){
@@ -59,7 +63,7 @@ public class ArchitectController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    @Operation(summary = "Create a new architect")
+    @Operation(summary = "Create a new architect", security = { @SecurityRequirement(name = "bearer-key") } )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "401", description = "Unauthorized, without any authentication", content = @Content),
             @ApiResponse(responseCode = "403", description = "Forbidden", content = @Content),
@@ -72,7 +76,7 @@ public class ArchitectController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = "/{id}")
-    @Operation(summary = "Delete an architect by id")
+    @Operation(summary = "Delete an architect by id", security = { @SecurityRequirement(name = "bearer-key") } )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "401", description = "Unauthorized, without any authentication"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
@@ -88,7 +92,7 @@ public class ArchitectController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping
-    @Operation(summary = "Updates an architect", description = "You must pass the name and the id, even if you want what already is")
+    @Operation(summary = "Updates an architect", description = "You must pass the name and the id, even if you want what already is", security = { @SecurityRequirement(name = "bearer-key") } )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "401", description = "Unauthorized, without any authentication"),
             @ApiResponse(responseCode = "403", description = "Forbidden"),
