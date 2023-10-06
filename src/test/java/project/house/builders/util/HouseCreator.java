@@ -15,4 +15,11 @@ public class HouseCreator {
                 .projectName("TestProject")
                 .build();
     }
+
+    public static House createValidUpdatedHouse(){
+        return House.builder()
+                .projectName("TestProject Updated")
+                .id(1L)
+                .build();
+    }
 }

@@ -1,7 +1,6 @@
-package project.house.builders.request;
+package project.house.builders.util;
 
 import project.house.builders.requests.HousePostRequestBody;
-import project.house.builders.util.HouseCreator;
 
 public class HousePostRequestBodyCreator {
     public static HousePostRequestBody createHousePostRequestBody(){
@@ -9,6 +8,12 @@ public class HousePostRequestBodyCreator {
                 .projectName(HouseCreator.createHouseToBeSaved().getProjectName())
                 .engineerId(1L)
                 .architectId(1L)
+                .build();
+    }
+
+    public static HousePostRequestBody createHousePostRequestBodyOnlyWithName(){
+        return HousePostRequestBody.builder()
+                .projectName(HouseCreator.createHouseToBeSaved().getProjectName())
                 .build();
     }
 }

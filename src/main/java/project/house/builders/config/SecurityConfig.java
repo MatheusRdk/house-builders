@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/auth/login")).permitAll()
                         .requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.POST, "/auth/register")).permitAll()
                         .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
+                        .requestMatchers(mvc.pattern("/houses/all")).permitAll()
                         .requestMatchers(mvc.pattern("/v3/api-docs/**")).permitAll()
                         .anyRequest().authenticated()
                 )
