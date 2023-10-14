@@ -31,5 +31,4 @@ public class House {
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne(cascade = CascadeType.MERGE)
     private Architect architect;
-
 }

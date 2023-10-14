@@ -1,7 +1,6 @@
 package project.house.builders.domain;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -27,7 +26,6 @@ public class Architect {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "architect", cascade = CascadeType.MERGE)
     private List<House> houses = new ArrayList<>();
 }

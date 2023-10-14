@@ -2,6 +2,7 @@ server:
   error:
     include-stacktrace: on_param
 
+
 spring:
   application:
     name: builders-project
@@ -13,6 +14,7 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
 logging:
   level:
     org:

@@ -27,7 +27,6 @@ public class Engineer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "engineer", cascade = CascadeType.MERGE)
     private List<House> houses = new ArrayList<>();
 }
