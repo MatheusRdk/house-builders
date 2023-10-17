@@ -73,7 +73,7 @@ public class HouseServiceTest {
         Mockito.when(engineerRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(existingEngineer));
         Mockito.when(architectRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(existingArchitect));
 
-        House savedHouse = houseService.save(HousePostRequestBodyCreator.createHousePostRequestBody());
+        House savedHouse = houseService.save(HousePostRequestBodyCreator.createHousePostRequestBodyEngineerAndArchitect());
 
         Mockito.verify(engineerRepository, Mockito.times(1)).findById(1L);
 

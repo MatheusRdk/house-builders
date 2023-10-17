@@ -79,11 +79,10 @@ public class EngineerController {
     @Operation(summary = "Delete an engineer by id", security = { @SecurityRequirement(name = "bearer-key") } )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "401", description = "Unauthorized, without any authentication"),
-            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "403", description = "Forbidden. You cannot delete an engineer that is linked to a house, " +
+                    "need to get the engineer out of this house via the house endpoints"),
             @ApiResponse(responseCode = "204", description = "Successful operation, deleted"),
-            @ApiResponse(responseCode = "400", description = "Engineer not found"),
-            @ApiResponse(responseCode = "500", description = "You cannot delete an engineer that is linked to a house, " +
-                    "need to get the engineer out of this house via the house endpoints")
+            @ApiResponse(responseCode = "400", description = "Engineer not found")
     })
     public ResponseEntity<Void> delete(@PathVariable long id){
         engineerService.delete(id);
